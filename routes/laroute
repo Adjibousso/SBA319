@@ -1,13 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const Item = require('../models/item');
+const User = require('../models/movies');
+
+
+
+
 
 // Create
 router.post('/', async (req, res) => {
     try {
-        const item = new Item(req.body);
-        await item.save();
-        res.status(201).send(item);
+        const user = new User(req.body);
+        await user.save();
+        res.status(201).send(user);
     } catch (err) {
         res.status(400).send(err);
     }
@@ -16,8 +20,8 @@ router.post('/', async (req, res) => {
 // Read All
 router.get('/', async (req, res) => {
     try {
-        const items = await Item.find();
-        res.status(200).send(items);
+        const users = await User.find();
+        res.status(200).send(users);
     } catch (err) {
         res.status(500).send(err);
     }
@@ -26,9 +30,9 @@ router.get('/', async (req, res) => {
 // Read One
 router.get('/:id', async (req, res) => {
     try {
-        const item = await Item.findById(req.params.id);
+        const item = await User.findById(req.params.id);
         if (!item) return res.status(404).send();
-        res.status(200).send(item);
+        res.status(200).send(User);
     } catch (err) {
         res.status(500).send(err);
     }
@@ -37,9 +41,9 @@ router.get('/:id', async (req, res) => {
 // Update
 router.patch('/:id', async (req, res) => {
     try {
-        const item = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-        if (!item) return res.status(404).send();
-        res.status(200).send(item);
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        if (!user) return res.status(404).send();
+        res.status(200).send(user);
     } catch (err) {
         res.status(400).send(err);
     }
@@ -48,9 +52,9 @@ router.patch('/:id', async (req, res) => {
 // Delete
 router.delete('/:id', async (req, res) => {
     try {
-        const item = await Item.findByIdAndDelete(req.params.id);
-        if (!item) return res.status(404).send();
-        res.status(200).send(item);
+        const user = await User.findByIdAndDelete(req.params.id);
+        if (!user) return res.status(404).send();
+        res.status(200).send(user);
     } catch (err) {
         res.status(500).send(err);
     }
