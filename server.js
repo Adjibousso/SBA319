@@ -85,7 +85,7 @@ const User = require("./models/users")
 runUser()
 
 async function runUser() {
-    const user =new User({name:"Bousso", age :"100", email:"bouss@ma21o2l.fr "})
+    const user =new User({name:"Bousso", age :"100", email:"bouss@ma3l.fr "})
     await user.save()
     console.log(user)
 }
@@ -94,11 +94,14 @@ const Comment = require("./models/comments")
 runComment()
 
 async function runComment() {
-    const comment =new Comment({name:"adja", age :"100", email:"bouss@juen.fr "})
+    const comment =new Comment({name:"adja", age :"100", email:"bouss@ju1n.fr "})
     await comment.save()
     console.log(comment)
 }
 
+const db = mongoose.connection;
+db.on('error', (error) => console.error(error));
+db.once('open', () => console.log('Connected to Database'));
 
 app.use('/users', userRoutes);
 app.listen(port, () => {
