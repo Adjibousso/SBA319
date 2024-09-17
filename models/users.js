@@ -5,11 +5,18 @@ const app = express();
 
 const mongoose= require("mongoose")
     const userSchema = new mongoose.Schema({
-        name : String,
-        age: Number,
-        email: String,
+        name: {
+            type: String,
+            required: true
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true
+        },
         
-    })
+        
+    });
 
     
 module.exports = mongoose.model("User", userSchema)
@@ -37,17 +44,34 @@ app.get('/models/users', async (req, res) => {
 });
 
 // Update
-app.patch('/users/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-        if (!user) {
-            return res.status(404).send();
-        }
-        res.status(200).send(user);
-    } catch (error) {
-        res.status(400).send(error);
+      const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+      if (user == null) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json(user);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
     }
-});
+  });
+  router.patch('/:id', async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id);
+      if (user == null) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      Object.keys(req.body).forEach(key => {
+        user[key] = req.body[key];
+      });
+  
+      await user.save();
+      res.json(user);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+  });
 
 // Delete
 app.delete('/users/:id', async (req, res) => {
